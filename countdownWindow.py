@@ -19,11 +19,15 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
         self.generateButton.clicked.connect(self.generateButtonClicked)
         self.solveButton.clicked.connect(self.solveButtonClicked)
         self.sLineEdits = [self.s1,self.s2,self.s3,self.s4,self.s5,self.s6]
-        # for inp in self.sLineEdits:
-        #     inp.textEdited.connect(self.valuesChanged)
-        # self.bigNo.textEdited.connect(self.valuesChanged)
+        self.numberSlider.valueChanged.connect(self.numberSliderChanged)
+        self.numberSliderChanged()
         self.generateButtonClicked()
 
+    def numberSliderChanged(self):
+        self.numberOfBigNos = self.numberSlider.value()
+        self.numberOfSmallNos = 6-self.numberOfBigNos
+        numberOfNumbersText = "Big Numbers: " + str(self.numberOfBigNos) + " Small numbers: " + str(self.numberOfSmallNos)
+        self.numberOfNumbers.setText(numberOfNumbersText)
 
     def validateInputs(self):
         valid = True
@@ -53,16 +57,7 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
 
 
     def solveButtonClicked(self):
-        self.validateInputs()
-        self.solutions.setText("Calculating...")
-        self.update()
-        QApplication.processEvents()
-        numbers = []
-        for no in self.sLineEdits:
-            numbers.append(int(no.text()))
-        bigNumber = int(self.bigNo.text())
-        self.combinations = []
-        self.checker = Checker(bigNumber,numbers,parentWindow=self)
+
         if len(self.combinations) == 0:
             self.solutions.setText("There are no solutions")
         else:
@@ -85,22 +80,43 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
 
     def generateButtonClicked(self):
         self.smallNumbers = []
-        for i in range(6):
-            self.smallNumbers.append(random.randint(1,10))
+        bigNos = [25,50,75,100]
+        i=-1
+        for i in range(self.numberOfBigNos):
+            chosenNumber = random.choice(bigNos)
+            self.smallNumbers.append(chosenNumber)
+            bigNos.remove(chosenNumber)
             self.sLineEdits[i].setText(str(self.smallNumbers[i]))
+        for j in range(self.numberOfSmallNos):
+            self.smallNumbers.append(random.randint(1,10))
+            self.sLineEdits[i+j+1].setText(str(self.smallNumbers[i+j+1]))
         self.bigNumber = random.randint(1,999)
         if self.bigNumber < 10:
             self.bigNumber = "00"+str(self.bigNumber)
         elif self.bigNumber < 100:
             self.bigNumber = "0"+str(self.bigNumber)
         self.bigNo.setText(str(self.bigNumber))
+        self.solve()
 
     def keyPressEvent(self,e):
         if e.key() == Qt.Key_Return:
-            self.solve()
+            self.solveButtonClicked()
 
     def solve(self):
-        pass
+        self.validateInputs()
+        self.solutions.setText("Calculating...")
+        self.update()
+        QApplication.processEvents()
+        numbers = []
+        for no in self.sLineEdits:
+            numbers.append(int(no.text()))
+        bigNumber = int(self.bigNo.text())
+        self.combinations = []
+        self.checker = Checker(bigNumber,numbers,parentWindow=self)
+        if len(self.combinations) == 0:
+            self.solutions.setText("There are no solutions")
+        else:
+            self.solutions.setText(f"There are {len(self.combinations)} solutions")
 
 
 if __name__ == "__main__":
