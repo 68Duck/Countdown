@@ -19,23 +19,24 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
         self.generateButton.clicked.connect(self.generateButtonClicked)
         self.solveButton.clicked.connect(self.solveButtonClicked)
         self.sLineEdits = [self.s1,self.s2,self.s3,self.s4,self.s5,self.s6]
-        for inp in self.sLineEdits:
-            inp.textEdited.connect(self.valuesChanged)
-        self.bigNo.textEdited.connect(self.valuesChanged)
+        # for inp in self.sLineEdits:
+        #     inp.textEdited.connect(self.valuesChanged)
+        # self.bigNo.textEdited.connect(self.valuesChanged)
         self.generateButtonClicked()
 
 
-    def valuesChanged(self):
+    def validateInputs(self):
+        valid = True
         for inp in self.sLineEdits:
             initalInput = inp.text()
             try:
                 initalInput = int(initalInput)
-                if initalInput > 10:
+                if initalInput > 100:
                     print(0/0) #so creates error
                 elif initalInput < 1:
                     print(0/0) #so creates error
             except:
-                self.errorWindow = ErrorWindow("The value you have entered is not valid. Please try again")
+                valid = False
                 inp.setText(str(1))
         initalInput = self.bigNo.text()
         try:
@@ -45,11 +46,14 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
             elif initalInput < 1:
                 print(0/0) #so creates error
         except:
-            self.errorWindow = ErrorWindow("The value you have entered is not valid. Please try again")
+            valid = False
             self.bigNo.setText(str(100))
+        if not valid:
+            self.errorWindow = ErrorWindow("The value you have entered is not valid. Please try again")
 
 
     def solveButtonClicked(self):
+        self.validateInputs()
         self.solutions.setText("Calculating...")
         self.update()
         QApplication.processEvents()
@@ -57,6 +61,7 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
         for no in self.sLineEdits:
             numbers.append(int(no.text()))
         bigNumber = int(self.bigNo.text())
+        self.combinations = []
         self.checker = Checker(bigNumber,numbers,parentWindow=self)
         if len(self.combinations) == 0:
             self.solutions.setText("There are no solutions")
