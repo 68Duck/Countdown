@@ -88,14 +88,13 @@ class Checker(object):
             else:
                 newSymbol = "*"
             correctOrder.append(newSymbol+str(number))
-        print(correctOrder)
+        # print(correctOrder)
         if __name__ == "__main__":
             global combinations
             combinations.append(correctOrder)
         if self.parentWindow is None:
-            print("test")
+            pass
         else:
-            print(self.parentWindow.combinations)
             self.parentWindow.combinations.append(correctOrder)
 
 

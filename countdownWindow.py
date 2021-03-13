@@ -50,14 +50,32 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
 
 
     def solveButtonClicked(self):
+        self.solutions.setText("Calculating...")
+        self.update()
+        QApplication.processEvents()
         numbers = []
         for no in self.sLineEdits:
             numbers.append(int(no.text()))
-        print(numbers)
         bigNumber = int(self.bigNo.text())
         self.checker = Checker(bigNumber,numbers,parentWindow=self)
         if len(self.combinations) == 0:
             self.solutions.setText("There are no solutions")
+        else:
+            solutions = ""
+            for combination in self.combinations:
+                combination[0] = combination[0][1:len(combination[0])]
+                for number in combination:
+                    if number[0:1] == "*":
+                        number = "x" + number[1:len(number)]
+                    elif number[0:1] == "/":
+                        number = "÷" + number[1:len(number)]
+                    if number != combination[0]: #can only be the first as doesn't have the sign
+                        number = number[0:1] + " " + number[1:len(number)] + " "
+                    else:
+                        number = number + " "
+                    solutions = solutions + number
+                solutions = solutions + "\n"
+            self.solutions.setText(solutions)
 
 
     def generateButtonClicked(self):

@@ -10,6 +10,11 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>15</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -164,11 +169,16 @@
    <widget class="QTextEdit" name="solutions">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>150</x>
       <y>380</y>
       <width>391</width>
       <height>161</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QPushButton" name="solveButton">
@@ -214,7 +224,7 @@
      <x>0</x>
      <y>0</y>
      <width>782</width>
-     <height>22</height>
+     <height>33</height>
     </rect>
    </property>
   </widget>
