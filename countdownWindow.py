@@ -65,9 +65,10 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
             for combination in self.combinations:
                 combination[0] = combination[0][1:len(combination[0])]
                 for number in combination:
-                    if number[0:1] == "*":
+                    sign = number[0:1]
+                    if sign == "*":
                         number = "x" + number[1:len(number)]
-                    elif number[0:1] == "/":
+                    elif sign == "/":
                         number = "÷" + number[1:len(number)]
                     if number != combination[0]: #can only be the first as doesn't have the sign
                         number = number[0:1] + " " + number[1:len(number)] + " "
