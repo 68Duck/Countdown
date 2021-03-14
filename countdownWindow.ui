@@ -169,9 +169,9 @@
    <widget class="QTextEdit" name="solutions">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>90</x>
       <y>380</y>
-      <width>391</width>
+      <width>511</width>
       <height>161</height>
      </rect>
     </property>
@@ -267,7 +267,7 @@
      <x>0</x>
      <y>0</y>
      <width>782</width>
-     <height>33</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>
