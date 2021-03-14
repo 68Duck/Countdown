@@ -63,20 +63,42 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
         else:
             solutions = ""
             for combination in self.combinations:
+                solution = ""
                 if combination[0][0:1] == "+":
-                    combination[0] = combination[0][1:len(combination[0])]
-                for number in combination:
-                    sign = number[0:1]
+                    combination[0] = combination[0][1:len(combination[0])]#
+                previousSign = None
+                startBrackets = 0
+                for i in range(len(combination)):
+                    if i != len(combination)-1:
+                        nextSign = combination[i+1][0:1]
+                    sign = combination[i][0:1]
+                    numberPart = combination[i][1:len(combination[i])]
                     if sign == "*":
-                        number = "x" + number[1:len(number)]
+                        sign = "x"
                     elif sign == "/":
-                        number = "÷" + number[1:len(number)]
-                    if number != combination[0]: #can only be the first as doesn't have the sign
-                        number = number[0:1] + " " + number[1:len(number)] + " "
+                        sign = "÷"
+                    if i != 0: #can only be the first as doesn't have the sign
+                        # if i == 1:
+                        if sign == "+" or sign == "-":
+                            if nextSign == "+" or nextSign == "-":
+                                number = sign + " " + numberPart + " "
+                            else:
+                                number = sign + " " + numberPart + ") "
+                                startBrackets += 1
+                        else:
+                            number = sign + " " + numberPart + " "
+
                     else:
-                        number = number + " "
-                    solutions = solutions + number
-                solutions = solutions + "\n"
+                        if sign == "+":
+                            number = numberPart + " "
+                        else:
+                            number = sign + numberPart + " "
+                    previousSign = sign[:]
+                    solution = solution + number
+
+                for j in range(startBrackets):
+                    solution = "(" + solution
+                solutions = solutions + solution + "\n"
             self.solutions.setText(solutions)
 
 
