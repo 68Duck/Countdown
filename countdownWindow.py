@@ -13,6 +13,7 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
         self.setupUi(self)
         self.setWindowTitle("Countdown")
         self.combinations = []
+        self.numbersChanged = False
         self.initUI()
 
     def initUI(self):
@@ -20,8 +21,14 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
         self.solveButton.clicked.connect(self.solveButtonClicked)
         self.sLineEdits = [self.s1,self.s2,self.s3,self.s4,self.s5,self.s6]
         self.numberSlider.valueChanged.connect(self.numberSliderChanged)
+        for edit in self.sLineEdits:
+            edit.textChanged.connect(self.numbersEdited)
+        self.bigNo.textChanged.connect(self.numbersEdited)
         self.numberSliderChanged()
         self.generateButtonClicked()
+
+    def numbersEdited(self):
+        self.numbersChanged = True
 
     def numberSliderChanged(self):
         self.numberOfBigNos = self.numberSlider.value()
@@ -57,7 +64,8 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
 
 
     def solveButtonClicked(self):
-
+        if self.numbersChanged:
+            self.solve()
         if len(self.combinations) == 0:
             self.solutions.setText("There are no solutions")
         else:
@@ -121,6 +129,7 @@ class CountdownWindow(QMainWindow,uic.loadUiType("countdownWindow.ui")[0]):
             self.bigNumber = "0"+str(self.bigNumber)
         self.bigNo.setText(str(self.bigNumber))
         self.solve()
+        self.numbersChanged = False
 
     def keyPressEvent(self,e):
         if e.key() == Qt.Key_Return:
